@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\POS.Domain\POS.Domain.csproj" />
+    <ProjectReference Include="..\POS.Infrastructure\POS.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

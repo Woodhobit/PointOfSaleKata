@@ -11,6 +11,7 @@ namespace POS.Domain.ProductAggregate
 
         public Discount(Guid productId, int quantity, decimal discountPrice)
         {
+            this.Id = Guid.NewGuid();
             this.ProductId = productId;
             this.Quantity = quantity;
             this.DiscountPrice = discountPrice;

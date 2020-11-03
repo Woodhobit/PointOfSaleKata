@@ -7,6 +7,9 @@ namespace POS.Domain.ProductAggregate
     {
         Task<List<Product>> GetByIdsAsync(List<T> ids);
         Task<List<Product>> GetAllAsync();
-        Task<Product> GetById(T id);
+        Task<Product> GetByIdAsync(T id);
+        Task<Product> GetByNameAsync(string name);
+        Task<Product> AddAsync(Product product);
+        Task SaveChangesAsync();
     }
 }

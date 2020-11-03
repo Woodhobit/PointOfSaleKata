@@ -11,22 +11,13 @@ namespace POS.Infrastructure.Persistence
         private List<Discount> discounts;
         private List<Product> products;
 
-        public IQueryable<Discount> Discounts 
-        { 
-            get => this.discounts.AsQueryable(); 
-            set => this.discounts = value.ToList(); 
-        }
-
-        public IQueryable<Product> Products 
-        { 
-            get => this.products.AsQueryable(); 
-            set => this.products = value.ToList(); 
-        }
-
         public InMemoryProductsContext()
         {
             this.SetupMock();
         }
+
+        public List<Discount> Discounts { get => this.discounts; set => this.discounts = value; }
+        public List<Product> Products { get => this.products; set => this.products = value; }
 
         public async Task SaveChanges()
         {

@@ -10,6 +10,11 @@ namespace POS.Domain.BasketAggregate
         private readonly List<BasketItem> items = new List<BasketItem>();
         public IReadOnlyCollection<BasketItem> Items => this.items.AsReadOnly();
 
+        public Basket()
+        {
+            this.Id = Guid.NewGuid();
+        }
+
         public void AddItem(Guid productId, decimal unitPrice, int quantity = 1)
         {
             if (!this.items.Any(i => i.ProductId == productId))

@@ -1,4 +1,5 @@
 ﻿using POS.Domain.ProductAggregate;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -6,8 +7,8 @@ namespace POS.Infrastructure.Persistence
 {
     public interface IProductsContext
     {
-        IQueryable<Discount> Discounts { get; set; }
-        IQueryable<Product> Products { get; set; }
+        List<Discount> Discounts { get; set; }
+        List<Product> Products { get; set; }
         Task SaveChanges();
     }
 }
