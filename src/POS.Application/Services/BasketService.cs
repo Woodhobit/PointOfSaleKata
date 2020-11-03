@@ -2,6 +2,7 @@
 using POS.Domain.BasketAggregate;
 using POS.Domain.ProductAggregate;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace POS.Application.Services
@@ -52,5 +53,43 @@ namespace POS.Application.Services
             var basket = await this.basketRepository.GetByIdAsync(basketId);
             await this.basketRepository.DeleteAsync(basket);
         }
+
+        public  async Task<Result<decimal>> CalculateTotal(Guid id)
+        {
+            var basket = await basketRepository.GetByIdAsync(id);
+            if (basket == null)
+            {
+                return new Result<decimal>($"Basket {id} is not found");
+            }
+
+            var groupedItems = basket.Items.GroupBy(x => x.ProductId);
+
+            decimal total = 0;
+            foreach (var group in groupedItems)
+            {
+                var product = await this.productRepository.GetByIdAsync(group.Key);
+
+                total =+ this.CalculateTotalForProduct(product.Discount, product.Price, group.Count());
+            }
+
+            return new Result<decimal>(total);
+        }
+
+        public decimal CalculateTotalForProduct(Discount discount, decimal price, int quantity)
+        {
+            var discountQuantity = discount.Quantity;
+            var discoutPrice = discount.DiscountPrice;
+
+            if (quantity < discountQuantity)
+            {
+                return price * quantity;
+            }
+
+            var notDiscountedPrice = (quantity % discountQuantity) * price;
+            var discountedPrice = (quantity / discountQuantity) * discoutPrice;
+
+            return notDiscountedPrice + discountedPrice;
+        }
+
     }
 }
