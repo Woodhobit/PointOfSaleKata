@@ -7,9 +7,11 @@ namespace POS.Domain.ProductAggregate
     {
         public int Quantity { get; private set; }
         public decimal DiscountPrice { get; private set; }
+        public Guid ProductId { get; private set; }
 
-        public Discount(int quantity, decimal discountPrice)
+        public Discount(Guid productId, int quantity, decimal discountPrice)
         {
+            this.ProductId = productId;
             this.Quantity = quantity;
             this.DiscountPrice = discountPrice;
         }

@@ -6,18 +6,19 @@ namespace POS.Domain.ProductAggregate
     public class Product : BaseEntity<Guid>, IAggregateRoot
     {
         public string Name { get; private set; }
-        public double Price { get; private set; }
+        public decimal Price { get; private set; }
         public bool IsDeleted { get; private set; }
         public Discount Discount { get; private set; }
 
-        public Product(string name, double price)
+        public Product(string name, decimal price)
         {
+            this.Id = Guid.NewGuid();
             this.Name = name;
             this.Price = price;
             this.IsDeleted = false;
         }
 
-        public void SetPrice(double price)
+        public void SetPrice(decimal price)
         {
             this.Price = price;
         }
