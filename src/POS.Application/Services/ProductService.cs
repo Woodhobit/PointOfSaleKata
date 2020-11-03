@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace POS.Application.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
         private readonly IProductRepository<Guid> productRepository;
 
@@ -18,8 +18,8 @@ namespace POS.Application.Services
         {
             //ToDo validation
 
-            var existed =  await this.productRepository.GetByNameAsync(name);
-            if(existed != null)
+            var existed = await this.productRepository.GetByNameAsync(name);
+            if (existed != null)
             {
                 return new Result<Product>($"Product {name} is already added");
             }
@@ -67,7 +67,18 @@ namespace POS.Application.Services
             return new Result<Product>(product);
         }
 
-        public async Task<Result<Product>> CreateOrUpdateDiscountAsync(Guid productId,int quantity, decimal discountPrice)
+        public async Task<Result<Product>> GetProductAsync(string name)
+        {
+            var product = await this.productRepository.GetByNameAsync(name);
+            if (product == null)
+            {
+                return new Result<Product>($"Product {name} is not found");
+            }
+
+            return new Result<Product>(product);
+        }
+
+        public async Task<Result<Product>> CreateOrUpdateDiscountAsync(Guid productId, int quantity, decimal discountPrice)
         {
             var result = await this.GetProductAsync(productId);
             if (result.IsSuccess == false)

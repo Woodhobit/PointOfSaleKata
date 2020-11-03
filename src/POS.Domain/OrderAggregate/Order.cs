@@ -3,23 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace POS.Domain.BasketAggregate
+namespace POS.Domain.OrderAggregate
 {
-    public class Basket : BaseEntity<Guid>, IAggregateRoot
+    public class Order : BaseEntity<Guid>, IAggregateRoot
     {
-        private readonly List<BasketItem> items = new List<BasketItem>();
-        public IReadOnlyCollection<BasketItem> Items => this.items.AsReadOnly();
+        private readonly List<OrderItem> items = new List<OrderItem>();
+        public IReadOnlyCollection<OrderItem> Items => this.items.AsReadOnly();
 
-        public Basket()
+        public Order()
         {
             this.Id = Guid.NewGuid();
         }
 
-        public void AddItem(Guid productId, decimal unitPrice, int quantity = 1)
+        public void AddItem(Guid productId, int quantity = 1)
         {
             if (!this.items.Any(i => i.ProductId == productId))
             {
-                this.items.Add(new BasketItem(productId, quantity, unitPrice));
+                this.items.Add(new OrderItem(productId, quantity));
                 return;
             }
 

@@ -1,18 +1,16 @@
 ﻿using POS.Domain.SeedWork;
 using System;
 
-namespace POS.Domain.BasketAggregate
+namespace POS.Domain.OrderAggregate
 {
-    public class BasketItem : BaseEntity<Guid>
+    public class OrderItem : BaseEntity<Guid>
     {
-        public decimal UnitPrice { get; private set; }
         public int Quantity { get; private set; }
         public Guid ProductId { get; private set; }
 
-        public BasketItem(Guid productId, int quantity, decimal unitPrice)
+        public OrderItem(Guid productId, int quantity)
         {
             ProductId = productId;
-            UnitPrice = unitPrice;
             SetQuantity(quantity);
         }
 
