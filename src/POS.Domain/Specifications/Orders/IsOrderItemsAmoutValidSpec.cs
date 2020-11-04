@@ -7,7 +7,7 @@ namespace POS.Domain.Specifications.Orders
     {
         public override bool IsSatisfiedBy(Order candidate)
         {
-            return candidate.Items.Count >= 1;
+            return candidate.Items.Count >= 0;
         }
     }
 }

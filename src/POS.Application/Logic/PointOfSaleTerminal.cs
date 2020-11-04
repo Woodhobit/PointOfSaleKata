@@ -4,9 +4,9 @@ using POS.Domain.OrderAggregate;
 using System;
 using System.Threading.Tasks;
 
-namespace POS.Application
+namespace POS.Application.Logic
 {
-    public class PointOfSaleTerminal
+    public class PointOfSaleTerminal : IPointOfSaleTerminal
     {
         private readonly IProductService productService;
         private readonly IOrderService orderService;
@@ -36,7 +36,7 @@ namespace POS.Application
             await this.orderService.AddItemToOrderAsync(this.order.Id, result.Value.Id);
         }
 
-        public async Task<decimal> CalculateTotal() 
+        public async Task<decimal> CalculateTotal()
         {
             var result = await this.orderService.CalculateTotalAsync(this.order.Id);
 
