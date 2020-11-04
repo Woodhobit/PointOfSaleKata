@@ -1,6 +1,7 @@
 ﻿using POS.Application.Common;
 using POS.Domain.OrderAggregate;
 using POS.Domain.ProductAggregate;
+using POS.Domain.SeedWork;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,6 +22,12 @@ namespace POS.Application.Services
         public async Task<Result<Order>> CreateOrder(Guid customerId)
         {
             var order = new Order(customerId);
+            var validationResult = this.ValidateOrder(order);
+            if (!validationResult.IsSuccess)
+            {
+                return validationResult;
+            }
+
             await this.orderRepository.AddAsync(order);
             await orderRepository.SaveChangesAsync();
 
@@ -29,8 +36,6 @@ namespace POS.Application.Services
 
         public async Task<Result<Order>> AddItemToOrderAsync(Guid orderId, Guid productId, int quantity = 1)
         {
-            //ToDo validation
-
             var product = await this.productRepository.GetByIdAsync(productId);
             if (product == null)
             {
@@ -45,9 +50,8 @@ namespace POS.Application.Services
 
             var order = result.Value;
             order.AddItem(productId, quantity);
-            await orderRepository.SaveChangesAsync();
 
-            return new Result<Order>(order);
+            return await this.ValidateOrderAndSaveAsync(order);
         }
 
         public async Task<Result<Order>> CancelOrderAsync(Guid orderId)
@@ -60,9 +64,8 @@ namespace POS.Application.Services
 
             var order = result.Value;
             order.Cancel();
-            await orderRepository.SaveChangesAsync();
 
-            return new Result<Order>(order);
+            return await this.ValidateOrderAndSaveAsync(order);
         }
 
         public async Task<Result<Order>> RemoveOrderItemsAsync(Guid orderId)
@@ -75,9 +78,8 @@ namespace POS.Application.Services
 
             var order = result.Value;
             order.Clean();
-            await orderRepository.SaveChangesAsync();
 
-            return new Result<Order>(order);
+            return await this.ValidateOrderAndSaveAsync(order);
         }
 
         private async Task<Result<Order>> GetOrderByIdAsync(Guid orderId)
@@ -129,5 +131,32 @@ namespace POS.Application.Services
             return notDiscountedPrice + discountedPrice;
         }
 
+        private async Task<Result<Order>> ValidateOrderAndSaveAsync(Order order)
+        {
+            var notification = new Notification();
+            order.Validate(notification);
+
+            if (!order.IsValid)
+            {
+                return new Result<Order>(notification.ErrorsAsString);
+            }
+
+            await orderRepository.SaveChangesAsync();
+
+            return new Result<Order>(order);
+        }
+
+        private Result<Order> ValidateOrder(Order order)
+        {
+            var notification = new Notification();
+            order.Validate(notification);
+
+            if (!order.IsValid)
+            {
+                return new Result<Order>(notification.ErrorsAsString);
+            }
+
+            return new Result<Order>(order);
+        }
     }
 }

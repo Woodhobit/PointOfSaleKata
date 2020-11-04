@@ -1,4 +1,5 @@
 ﻿using POS.Domain.SeedWork;
+using POS.Domain.Validators;
 using System;
 
 namespace POS.Domain.OrderAggregate
@@ -7,6 +8,7 @@ namespace POS.Domain.OrderAggregate
     {
         public int Quantity { get; private set; }
         public Guid ProductId { get; private set; }
+        public bool IsValid { get; private set; }
 
         public OrderItem(Guid productId, int quantity)
         {
@@ -22,6 +24,14 @@ namespace POS.Domain.OrderAggregate
         public void SetQuantity(int quantity)
         {
             Quantity = quantity;
+        }
+
+        public void Validate(Notification note)
+        {
+            var validator = new OrderItemValidator();
+            validator.Validate(note, this);
+
+            this.IsValid = !note.HasErrors;
         }
     }
 }

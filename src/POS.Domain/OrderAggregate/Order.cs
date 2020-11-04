@@ -1,4 +1,5 @@
 ﻿using POS.Domain.SeedWork;
+using POS.Domain.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace POS.Domain.OrderAggregate
         public Guid CustomerId { get; private set; }
         public DateTimeOffset Created { get; private set; }
         public bool Canceled { get;  private set; }
+        public bool IsValid { get; private set; }
 
         public Order(Guid customerId)
         {
@@ -46,6 +48,19 @@ namespace POS.Domain.OrderAggregate
         public void Cancel()
         {
             this.Canceled = true;
+        }
+
+        public void Validate(Notification note)
+        {
+            var validator = new OrderValidator();
+            validator.Validate(note, this);
+
+            foreach (var orderItem in this.items)
+            {
+                orderItem.Validate(note);
+            }
+
+            IsValid = !note.HasErrors;
         }
     }
 
