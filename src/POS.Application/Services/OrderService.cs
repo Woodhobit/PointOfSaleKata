@@ -20,11 +20,11 @@ namespace POS.Application.Services
 
         public async Task<Result<Order>> CreateOrder(Guid customerId)
         {
-            var basket = new Order(customerId);
-            await this.orderRepository.AddAsync(basket);
+            var order = new Order(customerId);
+            await this.orderRepository.AddAsync(order);
             await orderRepository.SaveChangesAsync();
 
-            return new Result<Order>(basket);
+            return new Result<Order>(order);
         }
 
         public async Task<Result<Order>> AddItemToOrderAsync(Guid orderId, Guid productId, int quantity = 1)

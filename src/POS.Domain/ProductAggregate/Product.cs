@@ -1,4 +1,5 @@
 ﻿using POS.Domain.SeedWork;
+using POS.Domain.Validators;
 using System;
 
 namespace POS.Domain.ProductAggregate
@@ -9,6 +10,7 @@ namespace POS.Domain.ProductAggregate
         public decimal Price { get; private set; }
         public bool IsDeleted { get; private set; }
         public Discount Discount { get; private set; }
+        public bool IsValid { get; private set; }
 
         public Product(string name, decimal price)
         {
@@ -36,6 +38,20 @@ namespace POS.Domain.ProductAggregate
         public void SetDiscount(Discount discount)
         {
             this.Discount = discount;
+        }
+
+        public void Validate(Notification note)
+        {
+            var validator = new ProductValidator();
+
+            validator.Validate(note, this);
+
+            if (this.Discount != null)
+            {
+                this.Discount.Validate(note);
+            }
+
+            this.IsValid = !note.HasErrors;
         }
     }
 }

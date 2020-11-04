@@ -1,5 +1,6 @@
 ﻿using POS.Application.Common;
 using POS.Domain.ProductAggregate;
+using POS.Domain.SeedWork;
 using System;
 using System.Threading.Tasks;
 
@@ -16,8 +17,6 @@ namespace POS.Application.Services
 
         public async Task<Result<Product>> CreateProductAsync(string name, decimal price)
         {
-            //ToDo validation
-
             var existed = await this.productRepository.GetByNameAsync(name);
             if (existed != null)
             {
@@ -25,6 +24,12 @@ namespace POS.Application.Services
             }
 
             var product = new Product(name, price);
+
+            var validationResult = this.ValidateProduct(product);
+            if (!validationResult.IsSuccess)
+            {
+                return validationResult;
+            }
 
             await this.productRepository.AddAsync(product);
             await this.productRepository.SaveChangesAsync();
@@ -34,8 +39,6 @@ namespace POS.Application.Services
 
         public async Task<Result<Product>> UpdateProductAsync(Guid id, string name, decimal price, bool isDeleted = false)
         {
-            //ToDo validation
-
             var result = await this.GetProductAsync(id);
             if (result.IsSuccess == false)
             {
@@ -49,6 +52,12 @@ namespace POS.Application.Services
             if (isDeleted)
             {
                 product.MarkAsDeleted();
+            }
+
+            var validationResult = this.ValidateProduct(product);
+            if (!validationResult.IsSuccess)
+            {
+                return validationResult;
             }
 
             await this.productRepository.SaveChangesAsync();
@@ -89,7 +98,26 @@ namespace POS.Application.Services
             var product = result.Value;
             product.SetDiscount(new Discount(productId, quantity, discountPrice));
 
+            var validationResult = this.ValidateProduct(product);
+            if (!validationResult.IsSuccess)
+            {
+                return validationResult;
+            }
+
             await this.productRepository.SaveChangesAsync();
+
+            return new Result<Product>(product);
+        }
+
+        private Result<Product> ValidateProduct(Product product)
+        {
+            var notification = new Notification();
+            product.Validate(notification);
+
+            if (!product.IsValid)
+            {
+                return new Result<Product>(notification.ErrorsAsString);
+            }
 
             return new Result<Product>(product);
         }

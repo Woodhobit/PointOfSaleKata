@@ -8,7 +8,6 @@ namespace POS.Infrastructure.Repositories
 {
     public class InMemoryProductRepositoryAsync : IProductRepository<Guid>
     {
-        private List<Discount> discounts;
         private List<Product> products;
 
         public InMemoryProductRepositoryAsync()
@@ -59,8 +58,6 @@ namespace POS.Infrastructure.Repositories
 
             var discountProductC = new Discount(productC.Id, 6, 5);
             productC.SetDiscount(discountProductC);
-
-            this.discounts = new List<Discount> { discountProductA, discountProductC };
 
             this.products = new List<Product> { productA, productB, productC, productD };
         }
