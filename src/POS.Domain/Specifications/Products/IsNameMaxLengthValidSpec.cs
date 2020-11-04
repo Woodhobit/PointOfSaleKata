@@ -3,11 +3,11 @@ using POS.Domain.SeedWork;
 
 namespace POS.Domain.Specifications.Products
 {
-    class IsNameMaxLengthValidSpec : CompositeSpecification<Product>
+    public class IsNameMaxLengthValidSpec : CompositeSpecification<Product>
     {
         public override bool IsSatisfiedBy(Product candidate)
         {
-            return !string.IsNullOrEmpty(candidate.Name) || candidate.Name?.Length <= 255;
+            return !string.IsNullOrEmpty(candidate.Name) && candidate.Name?.Length <= 255;
         }
     }
 }
