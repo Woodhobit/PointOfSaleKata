@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POS.Domain", "POS.Domain\POS.Domain.csproj", "{56E79112-0AF4-4FBE-99DE-A4416DF038FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POS.Domain", "POS.Domain\POS.Domain.csproj", "{56E79112-0AF4-4FBE-99DE-A4416DF038FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POS.Infrastructure", "POS.Infrastructure\POS.Infrastructure.csproj", "{86203ED8-904C-4535-B20B-71EFDD26D5CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POS.Infrastructure", "POS.Infrastructure\POS.Infrastructure.csproj", "{86203ED8-904C-4535-B20B-71EFDD26D5CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POS.Application", "POS.Application\POS.Application.csproj", "{49F9EA3B-5608-4C87-83A9-01B933063C96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POS.Application", "POS.Application\POS.Application.csproj", "{49F9EA3B-5608-4C87-83A9-01B933063C96}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POS.Client", "POS.Client\POS.Client.csproj", "{9E7071B4-7852-4928-BFC8-329652FC151A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{63DB60B8-5D66-4C8A-BD9E-36D720D3BD1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POS.UnitTests", "POS.UnitTests\POS.UnitTests.csproj", "{80CA4CBC-525F-4BC8-B32D-F772684D2698}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,16 @@ Global
 		{9E7071B4-7852-4928-BFC8-329652FC151A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E7071B4-7852-4928-BFC8-329652FC151A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E7071B4-7852-4928-BFC8-329652FC151A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80CA4CBC-525F-4BC8-B32D-F772684D2698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80CA4CBC-525F-4BC8-B32D-F772684D2698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80CA4CBC-525F-4BC8-B32D-F772684D2698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80CA4CBC-525F-4BC8-B32D-F772684D2698}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{80CA4CBC-525F-4BC8-B32D-F772684D2698} = {63DB60B8-5D66-4C8A-BD9E-36D720D3BD1D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {86645BD7-4A9D-462E-BE68-5109E51AE3EB}

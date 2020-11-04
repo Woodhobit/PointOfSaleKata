@@ -18,6 +18,12 @@ namespace POS.Domain.ProductAggregate
             this.Quantity = quantity;
             this.DiscountPrice = discountPrice;
         }
+        public Discount(Guid productId)
+        {
+            this.Id = Guid.NewGuid();
+            this.ProductId = productId;
+        }
+
 
         public void SetQuantity(int quantity)
         {

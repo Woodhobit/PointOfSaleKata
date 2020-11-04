@@ -10,6 +10,12 @@ namespace POS.Domain.OrderAggregate
         public Guid ProductId { get; private set; }
         public bool IsValid { get; private set; }
 
+        public OrderItem(Guid productId)
+        {
+            ProductId = productId;
+            SetQuantity(0);
+        }
+
         public OrderItem(Guid productId, int quantity)
         {
             ProductId = productId;

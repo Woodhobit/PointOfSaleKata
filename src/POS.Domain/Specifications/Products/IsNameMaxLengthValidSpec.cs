@@ -7,7 +7,7 @@ namespace POS.Domain.Specifications.Products
     {
         public override bool IsSatisfiedBy(Product candidate)
         {
-            return string.IsNullOrEmpty(candidate.Name) || candidate.Name?.Length <= 255;
+            return !string.IsNullOrEmpty(candidate.Name) || candidate.Name?.Length <= 255;
         }
     }
 }
