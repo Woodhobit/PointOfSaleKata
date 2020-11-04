@@ -9,10 +9,16 @@ namespace POS.Domain.OrderAggregate
     {
         private readonly List<OrderItem> items = new List<OrderItem>();
         public IReadOnlyCollection<OrderItem> Items => this.items.AsReadOnly();
+        public Guid CustomerId { get; private set; }
+        public DateTimeOffset Created { get; private set; }
+        public bool Canceled { get;  private set; }
 
-        public Order()
+        public Order(Guid customerId)
         {
             this.Id = Guid.NewGuid();
+            this.Created = DateTimeOffset.Now;
+            this.Canceled = false;
+            this.CustomerId = customerId;
         }
 
         public void AddItem(Guid productId, int quantity = 1)
@@ -35,6 +41,11 @@ namespace POS.Domain.OrderAggregate
         public void Clean()
         {
             this.items.Clear();
+        }
+
+        public void Cancel()
+        {
+            this.Canceled = true;
         }
     }
 

@@ -4,22 +4,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace POS.Infrastructure.Persistence
+namespace POS.Infrastructure.Repositories
 {
-    public class InMemoryProductsContext : IProductsContext
+    public class InMemoryProductRepositoryAsync : IProductRepository<Guid>
     {
         private List<Discount> discounts;
         private List<Product> products;
 
-        public InMemoryProductsContext()
+        public InMemoryProductRepositoryAsync()
         {
             this.SetupMock();
         }
 
-        public List<Discount> Discounts { get => this.discounts; set => this.discounts = value; }
-        public List<Product> Products { get => this.products; set => this.products = value; }
+        public Task<Product> AddAsync(Product product)
+        {
+            this.products.Add(product);
+            return Task.FromResult(product);
+        }
 
-        public async Task SaveChanges()
+        public Task<List<Product>> GetAllAsync()
+        {
+            return Task.FromResult(this.products.ToList());
+        }
+
+        public Task<Product> GetByIdAsync(Guid id)
+        {
+            return Task.FromResult(this.products.FirstOrDefault(x => x.Id == id));
+        }
+
+        public Task<Product> GetByNameAsync(string name)
+        {
+            return Task.FromResult(this.products.FirstOrDefault(x => x.Name == name));
+        }
+
+        public Task<List<Product>> GetByIdsAsync(List<Guid> ids)
+        {
+            return Task.FromResult(this.products.Where(x => ids.Contains(x.Id)).ToList());
+        }
+
+        public async Task SaveChangesAsync()
         {
             await Task.CompletedTask;
         }

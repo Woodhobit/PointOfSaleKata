@@ -18,15 +18,16 @@ namespace POS.Application.Services
             this.orderRepository = orderRepository;
         }
 
-        public async Task<Result<Order>> CreateOrder()
+        public async Task<Result<Order>> CreateOrder(Guid customerId)
         {
-            var basket = new Order();
+            var basket = new Order(customerId);
             await this.orderRepository.AddAsync(basket);
+            await orderRepository.SaveChangesAsync();
 
             return new Result<Order>(basket);
         }
 
-        public async Task<Result<Order>> AddItemToOrderAsync(Guid id, Guid productId, int quantity = 1)
+        public async Task<Result<Order>> AddItemToOrderAsync(Guid orderId, Guid productId, int quantity = 1)
         {
             //ToDo validation
 
@@ -36,33 +37,70 @@ namespace POS.Application.Services
                 return new Result<Order>($"Product {productId} is not found");
             }
 
-            var basket = await orderRepository.GetByIdAsync(id);
-            if (basket == null)
+            var result = await this.GetOrderByIdAsync(orderId);
+            if (!result.IsSuccess)
             {
-                return new Result<Order>($"Order {id} is not found");
+                return result;
             }
 
-            basket.AddItem(productId, quantity);
+            var order = result.Value;
+            order.AddItem(productId, quantity);
             await orderRepository.SaveChangesAsync();
 
-            return new Result<Order>(basket);
+            return new Result<Order>(order);
         }
 
-        public async Task DeleteOrderAsync(Guid basketId)
+        public async Task<Result<Order>> CancelOrderAsync(Guid orderId)
         {
-            var basket = await this.orderRepository.GetByIdAsync(basketId);
-            await this.orderRepository.DeleteAsync(basket);
-        }
-
-        public async Task<Result<decimal>> CalculateTotalAsync(Guid id)
-        {
-            var basket = await orderRepository.GetByIdAsync(id);
-            if (basket == null)
+            var result = await this.GetOrderByIdAsync(orderId);
+            if (!result.IsSuccess)
             {
-                return new Result<decimal>($"Order {id} is not found");
+                return result;
             }
 
-            var groupedItems = basket.Items.GroupBy(x => x.ProductId);
+            var order = result.Value;
+            order.Cancel();
+            await orderRepository.SaveChangesAsync();
+
+            return new Result<Order>(order);
+        }
+
+        public async Task<Result<Order>> RemoveOrderItemsAsync(Guid orderId)
+        {
+            var result = await this.GetOrderByIdAsync(orderId);
+            if (!result.IsSuccess)
+            {
+                return result;
+            }
+
+            var order = result.Value;
+            order.Clean();
+            await orderRepository.SaveChangesAsync();
+
+            return new Result<Order>(order);
+        }
+
+        private async Task<Result<Order>> GetOrderByIdAsync(Guid orderId)
+        {
+            var order = await this.orderRepository.GetByIdAsync(orderId);
+            if (order == null)
+            {
+                return new Result<Order>($"Order {orderId} is not found");
+            }
+
+            return new Result<Order>(order);
+        }
+
+        public async Task<Result<decimal>> CalculateTotalAsync(Guid orderId)
+        {
+            var result = await this.GetOrderByIdAsync(orderId);
+            if (!result.IsSuccess)
+            {
+                return new Result<decimal>(result.Error);
+            }
+
+            var order = result.Value;
+            var groupedItems = order.Items.GroupBy(x => x.ProductId);
 
             decimal total = 0;
             foreach (var group in groupedItems)
