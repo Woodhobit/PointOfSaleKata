@@ -51,7 +51,7 @@ namespace POS.Infrastructure.Repositories
             var productA = new Product("A", 1.25m);
             var productB = new Product("B", 4.25m);
             var productC = new Product("C", 1m);
-            var productD = new Product("D", 0.25m);
+            var productD = new Product("D", 0.75m);
 
             var discountProductA = new Discount(productA.Id, 3, 3);
             productA.SetDiscount(discountProductA);
