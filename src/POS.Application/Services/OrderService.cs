@@ -102,21 +102,24 @@ namespace POS.Application.Services
             }
 
             var order = result.Value;
-            var groupedItems = order.Items.GroupBy(x => x.ProductId);
 
             decimal total = 0;
-            foreach (var group in groupedItems)
+            foreach (var orderItem in order.Items)
             {
-                var product = await this.productRepository.GetByIdAsync(group.Key);
+                var product = await this.productRepository.GetByIdAsync(orderItem.ProductId);
 
-                total += this.CalculateTotalForProduct(product.Discount, product.Price, group.Count());
+                total += this.CalculateTotalForProduct(orderItem, product);
             }
 
             return new Result<decimal>(total);
         }
 
-        private decimal CalculateTotalForProduct(Discount discount, decimal price, int quantity)
+        private decimal CalculateTotalForProduct(OrderItem orderItem, Product product)
         {
+            var price = product.Price;
+            var quantity = orderItem.Quantity;
+            var discount = product.Discount;
+
             if (discount == null)
             {
                 return price * quantity;
