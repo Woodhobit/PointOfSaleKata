@@ -18,7 +18,7 @@ namespace POS.Application.Logic
             this.orderService = orderService;
         }
 
-        public async Task InitNewOrder(Guid customerId)
+        public async Task InitNewOrderAsync(Guid customerId)
         {
             var result = await this.orderService.CreateOrder(customerId);
 
@@ -27,7 +27,7 @@ namespace POS.Application.Logic
             this.order = result.Value;
         }
 
-        public async Task Scan(string name)
+        public async Task ScanAsync(string name)
         {
             var result = await this.productService.GetProductAsync(name);
 
@@ -36,7 +36,7 @@ namespace POS.Application.Logic
             await this.orderService.AddItemToOrderAsync(this.order.Id, result.Value.Id);
         }
 
-        public async Task<decimal> CalculateTotal()
+        public async Task<decimal> CalculateTotalAsync()
         {
             var result = await this.orderService.CalculateTotalAsync(this.order.Id);
 
@@ -45,12 +45,12 @@ namespace POS.Application.Logic
             return result.Value;
         }
 
-        public Task CancelOrder()
+        public Task CancelOrderAsync()
         {
             return this.orderService.CancelOrderAsync(this.order.Id);
         }
 
-        public Task DeleteItemsFromOrder()
+        public Task DeleteItemsFromOrderAsync()
         {
             return this.orderService.RemoveOrderItemsAsync(this.order.Id);
         }

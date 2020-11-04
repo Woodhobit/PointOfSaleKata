@@ -2,24 +2,25 @@
 using POS.Application.Logic;
 using POS.Client.Helpers;
 using System;
+using System.Threading.Tasks;
 
 namespace POS.Client
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var serviceProvider = DIHelper.Build();
 
             var terminal = serviceProvider.GetService<IPointOfSaleTerminal>();
 
-            terminal.InitNewOrder(Guid.NewGuid());
-            terminal.Scan("A");
-            terminal.Scan("B");
-            terminal.Scan("C");
+            await terminal.InitNewOrderAsync(Guid.NewGuid());
+            await terminal.ScanAsync("A");
+            await terminal.ScanAsync("A");
+            await terminal.ScanAsync("A");
+            await terminal.ScanAsync("A");
 
-            var result = terminal.CalculateTotal();
-
+            var result = await terminal.CalculateTotalAsync();
         }
     }
 }

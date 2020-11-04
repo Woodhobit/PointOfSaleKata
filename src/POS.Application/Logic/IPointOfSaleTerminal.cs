@@ -5,10 +5,10 @@ namespace POS.Application.Logic
 {
     public interface IPointOfSaleTerminal
     {
-        Task<decimal> CalculateTotal();
-        Task CancelOrder();
-        Task DeleteItemsFromOrder();
-        Task InitNewOrder(Guid customerId);
-        Task Scan(string name);
+        Task<decimal> CalculateTotalAsync();
+        Task CancelOrderAsync();
+        Task DeleteItemsFromOrderAsync();
+        Task InitNewOrderAsync(Guid customerId);
+        Task ScanAsync(string name);
     }
 }

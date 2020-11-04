@@ -109,7 +109,7 @@ namespace POS.Application.Services
             {
                 var product = await this.productRepository.GetByIdAsync(group.Key);
 
-                total = +this.CalculateTotalForProduct(product.Discount, product.Price, group.Count());
+                total += this.CalculateTotalForProduct(product.Discount, product.Price, group.Count());
             }
 
             return new Result<decimal>(total);
@@ -117,6 +117,11 @@ namespace POS.Application.Services
 
         private decimal CalculateTotalForProduct(Discount discount, decimal price, int quantity)
         {
+            if (discount == null)
+            {
+                return price * quantity;
+            }
+
             var discountQuantity = discount.Quantity;
             var discoutPrice = discount.DiscountPrice;
 
